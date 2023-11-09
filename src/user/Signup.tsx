@@ -2,18 +2,37 @@ import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthForm } from "./components/AuthForm";
+import { AuthFormWithName } from "../components/AuthFormWithNameAndIcon";
+import { API_BASEURL } from "../constants";
 
-export const Login: React.FC = () => {
-  const [isFailured, setIsFailured] = useState<boolean>();
+export const Signup: React.FC = () => {
   const navigate = useNavigate();
+  const [isFailured, setIsFailured] = useState<boolean>();
+  const [iconFile, setIconFile] = useState<FormData>();
 
-  const onSubmitLogin = (email: string, password: string) => {
-    const URL: string = "https://railway.bookreview.techtrain.dev";
+  const onSubmitSignup = (name: string, email: string, password: string) => {
     axios
-      .post(`${URL}/signin`, { email: email, password: password })
+      .post(`${API_BASEURL}/users`, {
+        name: name,
+        email: email,
+        password: password,
+      })
       .then((res) => {
-        navigate("/");
+        iconFile
+          ? axios
+              .post(`${API_BASEURL}/uploads`, iconFile, {
+                headers: {
+                  // content-type
+                  authorization: `Bearer ${res.data.token}`,
+                },
+              })
+              .then(() => {
+                navigate("/");
+              })
+              .catch(() => {
+                setIsFailured(true);
+              })
+          : navigate("/");
       })
       .catch(() => {
         setIsFailured(true);
@@ -21,11 +40,11 @@ export const Login: React.FC = () => {
   };
   return (
     <>
-      {isFailured && <StyledError>ログインに失敗しました。</StyledError>}
+      {isFailured && <StyledError>ユーザー登録に失敗しました。</StyledError>}
       <StyledForm>
-        <h1>ログイン</h1>
-        <AuthForm onSubmit={onSubmitLogin} />
-        <Link to="/signup">ユーザー登録</Link>
+        <h1>ユーザー登録</h1>
+        <AuthFormWithName onSubmit={onSubmitSignup} setIconFile={setIconFile} />
+        <Link to="/login">ログイン画面</Link>
       </StyledForm>
     </>
   );
@@ -37,7 +56,7 @@ const StyledForm = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60px;
+  padding: 30px 60px;
   box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.2);
   margin: 60px auto;
 
@@ -72,8 +91,12 @@ const StyledForm = styled.div`
       padding: 10px 0;
       background-color: slateblue;
       border: 1px solid light-gray;
-      margin: 60px auto;
+      margin: 30px auto 0;
     }
+  }
+
+  div:last-of-type {
+    margin-top: 30px;
   }
 
   a {
