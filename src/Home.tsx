@@ -21,7 +21,7 @@ export const Home: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
 
   const AUTH_KEY =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTgxNDg4ODksImlhdCI6MTY5ODA2MjQ4OSwic3ViIjoiNTQ1NDY1NTczNTQiLCJ1c2VyX2lkIjoiMTA4NjYyZWUtODQyZS00MGViLTljOWQtZTMxMDVkODA5NDJkIn0.z4NwFb1wUGAF9v98dTbSCDKAfwMWtKZItK9uqbeoaaE";
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2O…JkIn0.t7bkhcjg9gGRbJDXXdPIu3MRU97Ch96mQHEFjet4kCg";
 
   useEffect(() => {
     axios

@@ -13,6 +13,7 @@ export const Login: React.FC = () => {
     axios
       .post(`${API_BASEURL}/signin`, { email: email, password: password })
       .then((res) => {
+        console.log(res);
         navigate("/");
       })
       .catch(() => {
