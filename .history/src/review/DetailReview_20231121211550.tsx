@@ -1,12 +1,11 @@
 import axios from 'axios';
 import { useState, useEffect, Suspense } from 'react';
 import { useCookies } from 'react-cookie';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Loading } from '../components/Loading';
 import styled from 'styled-components';
 
 type review = {
-  id: string;
   title: string;
   url: string;
   detail: string;
@@ -16,47 +15,32 @@ type review = {
 };
 
 const DetailReviewFunction = ({
-  review,
+  values,
   setState,
 }: {
-  review?: review;
+  values?: object;
   setState?: React.Dispatch<React.SetStateAction<any>>;
 }) => {
+  const [review, setReview] = useState<review>();
   const navigate = useNavigate();
   const { id } = useParams();
   const [cookies] = useCookies();
 
-  const onClickDelete = () => {
+  useEffect(() => {
     axios
-      .delete(`${process.env.REACT_APP_API_URL}/books/${id}`, {
-        headers: {
-          Authorization: cookies.token,
-        },
-      })
-      .then(() => {
-        navigate('/');
-      })
-      .catch(() => {
-        alert('レビューの削除に失敗しました。');
-      });
-  };
-
-  if (!review && setState) {
-    throw axios
       .get(`${process.env.REACT_APP_API_URL}/books/${id}`, {
         headers: {
           Authorization: cookies.token,
         },
       })
       .then((res) => {
-        setState(res.data);
+        setReview(res.data);
       })
       .catch(() => {
         alert('レビュー詳細の取得に失敗しました。');
         navigate('/');
       });
-  }
-
+  }, []);
   return (
     review && (
       <StyledDetailReview>
@@ -71,25 +55,18 @@ const DetailReviewFunction = ({
         <p>{review.review}</p>
         <p>{review.reviewer}</p>
         {review.isMine && (
-          <button
-            onClick={() => navigate(`/edit/${review.id}`, { state: review })}
-          >
-            編集
-          </button>
+          <button onClick={() => navigate('/edit')}>編集</button>
         )}
-        {review.isMine && <button onClick={() => onClickDelete()}>削除</button>}
       </StyledDetailReview>
     )
   );
 };
 
 export const DetailReview = () => {
-  const location = useLocation();
-  console.log(location.state.title + 'が選択されました。');
   const [review, setReview] = useState();
   return (
     <Suspense fallback={<Loading />}>
-      <DetailReviewFunction review={review} setState={setReview} />
+      <DetailReviewFunction values={review} setState={setReview} />
     </Suspense>
   );
 };

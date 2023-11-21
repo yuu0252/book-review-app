@@ -7,7 +7,6 @@ import { Login } from './user/Login';
 import { EditUser } from './user/EditUser';
 import { CreateReview } from './review/CreateReview';
 import { DetailReview } from './review/DetailReview';
-import { EditReview } from './review/EditReview';
 
 export const Router = () => {
   return (
@@ -18,7 +17,6 @@ export const Router = () => {
       <Route path="/profile" element={<EditUser />} />
       <Route path="/new" element={<CreateReview />} />
       <Route path="/detail/:id" element={<DetailReview />} />
-      <Route path="/edit/:id" element={<EditReview />} />
       <Route path="/*" element={<Page404 />} />
     </Routes>
   );

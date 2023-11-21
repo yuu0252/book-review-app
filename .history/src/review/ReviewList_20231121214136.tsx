@@ -83,7 +83,7 @@ export const ReviewList = () => {
           {reviewList?.map((review) => (
             <li key={review.id} className="review">
               <Link
-                to={`/detail/${review.id}`}
+                to={`/books/${review.id}`}
                 state={{ title: review.title }}
                 className="review__link"
               >

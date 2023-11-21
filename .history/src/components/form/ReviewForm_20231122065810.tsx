@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
@@ -16,7 +16,11 @@ export const ReviewForm = ({
   onSubmit: (data: data) => void;
   review?: data;
 }) => {
-  const defaultValues = review;
+  const defaultValues = useMemo(() => {
+    return {
+      review: review,
+    };
+  }, [review]);
 
   const {
     register,

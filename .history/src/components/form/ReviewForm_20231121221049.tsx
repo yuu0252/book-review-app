@@ -1,4 +1,3 @@
-import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 
@@ -16,19 +15,16 @@ export const ReviewForm = ({
   onSubmit: (data: data) => void;
   review?: data;
 }) => {
-  const defaultValues = review;
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<data>({ mode: 'onChange', defaultValues });
+  } = useForm<data>({ mode: 'onChange' });
 
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)}>
       <label htmlFor="title">タイトル</label>
       <input
-        defaultValue={review ? review.title : ''}
         type="text"
         {...register('title', {
           required: 'タイトルを入力してください',
@@ -37,7 +33,6 @@ export const ReviewForm = ({
       <p>{errors.title?.message}</p>
       <label htmlFor="url">URL</label>
       <input
-        defaultValue={review ? review.url : ''}
         type="text"
         {...register('url', {
           required: 'URLを入力してください',
@@ -46,7 +41,6 @@ export const ReviewForm = ({
       <p>{errors.url?.message}</p>
       <label htmlFor="detail">詳細</label>
       <input
-        defaultValue={review ? review.detail : ''}
         type="text"
         {...register('detail', {
           required: '詳細を入力してください',
@@ -55,7 +49,6 @@ export const ReviewForm = ({
       <p>{errors.detail?.message}</p>
       <label htmlFor="review">レビュー</label>
       <textarea
-        defaultValue={review ? review.review : ''}
         {...register('review', {
           required: 'レビューを入力してください',
         })}

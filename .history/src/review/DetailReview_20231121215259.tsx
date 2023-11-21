@@ -6,7 +6,6 @@ import { Loading } from '../components/Loading';
 import styled from 'styled-components';
 
 type review = {
-  id: string;
   title: string;
   url: string;
   detail: string;
@@ -33,7 +32,7 @@ const DetailReviewFunction = ({
           Authorization: cookies.token,
         },
       })
-      .then(() => {
+      .then((res) => {
         navigate('/');
       })
       .catch(() => {
@@ -71,13 +70,9 @@ const DetailReviewFunction = ({
         <p>{review.review}</p>
         <p>{review.reviewer}</p>
         {review.isMine && (
-          <button
-            onClick={() => navigate(`/edit/${review.id}`, { state: review })}
-          >
-            編集
-          </button>
+          <button onClick={() => navigate('/edit')}>編集</button>
         )}
-        {review.isMine && <button onClick={() => onClickDelete()}>削除</button>}
+        {review.isMine && <button onClick={() => onClickDelete}>削除</button>}
       </StyledDetailReview>
     )
   );

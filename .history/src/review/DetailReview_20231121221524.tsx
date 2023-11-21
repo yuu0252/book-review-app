@@ -6,7 +6,6 @@ import { Loading } from '../components/Loading';
 import styled from 'styled-components';
 
 type review = {
-  id: string;
   title: string;
   url: string;
   detail: string;
@@ -71,9 +70,7 @@ const DetailReviewFunction = ({
         <p>{review.review}</p>
         <p>{review.reviewer}</p>
         {review.isMine && (
-          <button
-            onClick={() => navigate(`/edit/${review.id}`, { state: review })}
-          >
+          <button onClick={() => navigate('/edit', { state: review })}>
             編集
           </button>
         )}

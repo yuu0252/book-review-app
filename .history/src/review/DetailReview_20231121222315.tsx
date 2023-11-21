@@ -6,7 +6,6 @@ import { Loading } from '../components/Loading';
 import styled from 'styled-components';
 
 type review = {
-  id: string;
   title: string;
   url: string;
   detail: string;

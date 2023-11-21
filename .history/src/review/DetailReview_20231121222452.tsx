@@ -15,6 +15,13 @@ type review = {
   isMine: boolean;
 };
 
+type data = {
+  title: string;
+  url: string;
+  detail: string;
+  review: string;
+};
+
 const DetailReviewFunction = ({
   review,
   setState,
