@@ -1,0 +1,55 @@
+@mixin sp {
+  @media screen and (max-width: 767px) {
+    @content;
+  }
+}
+@mixin pc {
+  @media screen and (min-width: 768px) {
+    @content;
+  }
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.review__container {
+  max-width: 1000px;
+  width: 80%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  list-style: none;
+  margin: 60px auto;
+
+  grid-template-columns: 1fr;
+}
+
+.review {
+  border-bottom: 1px solid gray;
+}
+
+.review__link {
+  display: block;
+  padding: 15px;
+}
+
+.review__text {
+  margin: 15px;
+}
+
+.review__reviewer {
+  text-align: right;
+}
+
+.create-btn {
+  max-width: 1000px;
+  width: 80%;
+  margin: 60px auto 0;
+
+  button {
+    background-color: lightgreen;
+    border-radius: 5px;
+    padding: 5px 15px;
+  }
+}
