@@ -1,13 +1,13 @@
-import { useNavigate } from 'react-router-dom';
-import { IoIosLogIn } from 'react-icons/io';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { IoIosLogIn } from "react-icons/io";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const HeaderNoneAuth = () => {
   const navigate = useNavigate();
 
   const onClickLogin = () => {
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
@@ -18,7 +18,7 @@ export const HeaderNoneAuth = () => {
           <p>ログインしていません</p>
         </Link>
       </div>
-      <button onClick={onClickLogin}>
+      <button onClick={onClickLogin} aria-label="login">
         <IoIosLogIn />
       </button>
     </StyledHeader>

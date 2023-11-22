@@ -1,28 +1,28 @@
-import axios from 'axios';
-import { useCookies } from 'react-cookie';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { IoIosLogOut } from 'react-icons/io';
-import { FaUserEdit } from 'react-icons/fa';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { logout } from '../user/loginSlice';
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { IoIosLogOut } from "react-icons/io";
+import { FaUserEdit } from "react-icons/fa";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../user/loginSlice";
 
 export const Header = () => {
-  const [cookies, , removeCookie] = useCookies(['token']);
-  const [username, setUsername] = useState('');
+  const [cookies, , removeCookie] = useCookies(["token"]);
+  const [username, setUsername] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const onClickLogout = () => {
-    removeCookie('token');
+    removeCookie("token");
     dispatch(logout());
-    navigate('/');
+    navigate("/");
   };
 
   const onClickEditUser = () => {
-    navigate('/profile');
+    navigate("/profile");
   };
 
   axios
@@ -35,7 +35,7 @@ export const Header = () => {
       setUsername(res.data.name);
     })
     .catch(() => {
-      alert('ユーザー取得に失敗しました。');
+      alert("ユーザー取得に失敗しました。");
     });
   return (
     <StyledHeader>
@@ -46,10 +46,10 @@ export const Header = () => {
         </Link>
       </div>
       <div>
-        <button onClick={onClickEditUser}>
+        <button onClick={onClickEditUser} aria-label="edit-user">
           <FaUserEdit />
         </button>
-        <button onClick={onClickLogout}>
+        <button onClick={onClickLogout} aria-label="logout">
           <IoIosLogOut />
         </button>
       </div>

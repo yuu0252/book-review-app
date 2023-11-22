@@ -1,9 +1,9 @@
-import axios from 'axios';
-import { useState, useEffect, Suspense } from 'react';
-import { useCookies } from 'react-cookie';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Loading } from '../components/Loading';
-import styled from 'styled-components';
+import axios from "axios";
+import { useState, useEffect, Suspense } from "react";
+import { useCookies } from "react-cookie";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Loading } from "../components/Loading";
+import styled from "styled-components";
 
 type review = {
   id: string;
@@ -26,21 +26,6 @@ const DetailReviewFunction = ({
   const { id } = useParams();
   const [cookies] = useCookies();
 
-  const onClickDelete = () => {
-    axios
-      .delete(`${process.env.REACT_APP_API_URL}/books/${id}`, {
-        headers: {
-          Authorization: cookies.token,
-        },
-      })
-      .then(() => {
-        navigate('/');
-      })
-      .catch(() => {
-        alert('レビューの削除に失敗しました。');
-      });
-  };
-
   if (!review && setState) {
     throw axios
       .get(`${process.env.REACT_APP_API_URL}/books/${id}`, {
@@ -52,8 +37,8 @@ const DetailReviewFunction = ({
         setState(res.data);
       })
       .catch(() => {
-        alert('レビュー詳細の取得に失敗しました。');
-        navigate('/');
+        alert("レビュー詳細の取得に失敗しました。");
+        navigate("/");
       });
   }
 
@@ -67,9 +52,9 @@ const DetailReviewFunction = ({
             {review.url}
           </a>
         </p>
-        <p>{review.detail}</p>
-        <p>{review.review}</p>
-        <p>{review.reviewer}</p>
+        <p>詳細 : {review.detail}</p>
+        <p>レビュー : {review.review}</p>
+        <p>レビューワー : {review.reviewer}</p>
         {review.isMine && (
           <button
             onClick={() => navigate(`/edit/${review.id}`, { state: review })}
@@ -77,7 +62,6 @@ const DetailReviewFunction = ({
             編集
           </button>
         )}
-        {review.isMine && <button onClick={() => onClickDelete()}>削除</button>}
       </StyledDetailReview>
     )
   );
@@ -85,7 +69,7 @@ const DetailReviewFunction = ({
 
 export const DetailReview = () => {
   const location = useLocation();
-  console.log(location.state.title + 'が選択されました。');
+  console.log(location.state.title + "が選択されました。");
   const [review, setReview] = useState();
   return (
     <Suspense fallback={<Loading />}>
@@ -95,7 +79,29 @@ export const DetailReview = () => {
 };
 
 const StyledDetailReview = styled.div`
+  width: 80%;
+  max-width: 600px;
+  padding: 60px;
+  box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.2);
+  margin: 60px auto;
+
+  h1 {
+    margin-bottom: 30px;
+  }
+
   a {
     text-decoration: underline;
+    margin-bottom: 30px;
+  }
+
+  p {
+    margin-bottom: 30px;
+  }
+
+  button {
+    padding: 5px 15px;
+    background-color: purple;
+    border-radius: 5px;
+    color: white;
   }
 `;

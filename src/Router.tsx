@@ -1,13 +1,13 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { Home } from './Home';
-import { Signup } from './user/Signup';
-import { Page404 } from './Page404';
-import { Login } from './user/Login';
-import { EditUser } from './user/EditUser';
-import { CreateReview } from './review/CreateReview';
-import { DetailReview } from './review/DetailReview';
-import { EditReview } from './review/EditReview';
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Home } from "./Home";
+import { Signup } from "./user/Signup";
+import { Page404 } from "./Page404";
+import { Login } from "./user/Login";
+import { EditUser } from "./user/EditUser";
+import { CreateReview } from "./review/CreateReview";
+import { DetailReview } from "./review/DetailReview";
+import { EditReview } from "./review/EditReview";
 
 export const Router = () => {
   return (

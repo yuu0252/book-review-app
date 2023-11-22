@@ -1,8 +1,8 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { selectPage } from '../pageSlice';
-import { prevPage, nextPage } from '../pageSlice';
-import styled from 'styled-components';
-import { LuArrowLeftSquare, LuArrowRightSquare } from 'react-icons/lu';
+import { useSelector, useDispatch } from "react-redux";
+import { selectPage } from "../pageSlice";
+import { prevPage, nextPage } from "../pageSlice";
+import styled from "styled-components";
+import { LuArrowLeftSquare, LuArrowRightSquare } from "react-icons/lu";
 
 export const Pagination = ({ isExistNext }: { isExistNext: boolean }) => {
   const page = useSelector(selectPage);
@@ -10,7 +10,7 @@ export const Pagination = ({ isExistNext }: { isExistNext: boolean }) => {
   return (
     <StyledPagination>
       {page !== 0 ? (
-        <button onClick={() => dispatch(prevPage())}>
+        <button aria-label="back" onClick={() => dispatch(prevPage())}>
           <LuArrowLeftSquare />
         </button>
       ) : (
@@ -20,7 +20,7 @@ export const Pagination = ({ isExistNext }: { isExistNext: boolean }) => {
         <span>{page + 1}</span>
       </p>
       {isExistNext ? (
-        <button onClick={() => dispatch(nextPage())}>
+        <button aria-label="next" onClick={() => dispatch(nextPage())}>
           <LuArrowRightSquare />
         </button>
       ) : (

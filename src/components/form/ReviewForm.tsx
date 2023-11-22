@@ -1,6 +1,6 @@
-import { useEffect, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import styled from "styled-components";
 
 type data = {
   title: string;
@@ -21,47 +21,50 @@ export const ReviewForm = ({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm<data>({ mode: 'onChange', defaultValues });
+  } = useForm<data>({ mode: "onChange", defaultValues });
+
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues]);
 
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)}>
       <label htmlFor="title">タイトル</label>
       <input
-        defaultValue={review ? review.title : ''}
         type="text"
-        {...register('title', {
-          required: 'タイトルを入力してください',
+        {...register("title", {
+          required: "タイトルを入力してください",
         })}
       />
       <p>{errors.title?.message}</p>
       <label htmlFor="url">URL</label>
       <input
-        defaultValue={review ? review.url : ''}
         type="text"
-        {...register('url', {
-          required: 'URLを入力してください',
+        {...register("url", {
+          required: "URLを入力してください",
         })}
       />
       <p>{errors.url?.message}</p>
       <label htmlFor="detail">詳細</label>
       <input
-        defaultValue={review ? review.detail : ''}
         type="text"
-        {...register('detail', {
-          required: '詳細を入力してください',
+        {...register("detail", {
+          required: "詳細を入力してください",
         })}
       />
       <p>{errors.detail?.message}</p>
       <label htmlFor="review">レビュー</label>
       <textarea
-        defaultValue={review ? review.review : ''}
-        {...register('review', {
-          required: 'レビューを入力してください',
+        {...register("review", {
+          required: "レビューを入力してください",
         })}
       />
       <p>{errors.review?.message}</p>
-      <button type="submit">登録</button>
+      <button type="submit" aria-label="submit">
+        登録
+      </button>
     </StyledForm>
   );
 };

@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import styled from 'styled-components';
-import { ReviewForm } from '../components/form/ReviewForm';
-import axios from 'axios';
-import { useCookies } from 'react-cookie';
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import styled from "styled-components";
+import { ReviewForm } from "../components/form/ReviewForm";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 
 type data = {
   title: string;
@@ -18,6 +18,21 @@ export const EditReview = () => {
   const [cookies] = useCookies();
   const [review, setReview] = useState();
 
+  const onClickDelete = () => {
+    axios
+      .delete(`${process.env.REACT_APP_API_URL}/books/${id}`, {
+        headers: {
+          Authorization: cookies.token,
+        },
+      })
+      .then(() => {
+        navigate("/");
+      })
+      .catch(() => {
+        alert("レビューの削除に失敗しました。");
+      });
+  };
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/books/${id}`, {
@@ -29,8 +44,8 @@ export const EditReview = () => {
         setReview(res.data);
       })
       .catch(() => {
-        alert('レビュー詳細の取得に失敗しました。');
-        navigate('/');
+        alert("レビュー詳細の取得に失敗しました。");
+        navigate("/");
       });
   }, []);
 
@@ -41,14 +56,17 @@ export const EditReview = () => {
           Authorization: cookies.token,
         },
       })
-      .then(() => navigate('/'))
-      .catch(() => alert('投稿に失敗しました。'));
+      .then(() => navigate("/"))
+      .catch(() => alert("投稿に失敗しました。"));
   };
 
   return (
     <StyledEditReview>
       <h1>レビュー編集</h1>
       <ReviewForm onSubmit={onSubmitEdit} review={review} />
+      <button className="delete-btn" onClick={() => onClickDelete()}>
+        削除
+      </button>
       <Link to="/">ホームへ</Link>
     </StyledEditReview>
   );
@@ -70,5 +88,12 @@ const StyledEditReview = styled.div`
 
   a {
     text-align: center;
+  }
+
+  .delete-btn {
+    margin: -30px auto 15px;
+    padding: 5px 15px;
+    background-color: red;
+    color: white;
   }
 `;
