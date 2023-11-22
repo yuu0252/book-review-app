@@ -18,14 +18,14 @@ const EditReviewFunction = ({
   setReview,
 }: {
   review?: data;
-  setReview?: React.Dispatch<React.SetStateAction<any>>;
+  setReview?: React.Dispatch<React.SetStateAction<undefined>>;
 }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [cookies] = useCookies();
 
-  if (!review && setReview) {
-    throw axios
+  if (review && setReview) {
+    axios
       .get(`${process.env.REACT_APP_API_URL}/books/${id}`, {
         headers: {
           Authorization: cookies.token,

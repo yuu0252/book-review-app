@@ -111,12 +111,14 @@ export const ReviewList = () => {
             <button onClick={() => navigate('/new')}>レビュー新規作成</button>
           </div>
         )}
+
         <ReviewListFunction
           isLogin={isLogin}
           reviewList={reviewList}
           setReviewList={setReviewList}
           setIsExistNext={setIsExistNext}
         />
+
         <Pagination isExistNext={isExistNext} />
       </section>
     </Suspense>

@@ -56,7 +56,11 @@ const DetailReviewFunction = ({
         <p>レビュー : {review.review}</p>
         <p>レビューワー : {review.reviewer}</p>
         {review.isMine && (
-          <button onClick={() => navigate(`/edit/${review.id}`)}>編集</button>
+          <button
+            onClick={() => navigate(`/edit/${review.id}`, { state: review })}
+          >
+            編集
+          </button>
         )}
       </StyledDetailReview>
     )

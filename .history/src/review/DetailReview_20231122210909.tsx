@@ -20,7 +20,7 @@ const DetailReviewFunction = ({
   setState,
 }: {
   review?: review;
-  setState?: React.Dispatch<React.SetStateAction<any>>;
+  setState?: React.Dispatch<React.SetStateAction<undefined>>;
 }) => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -56,7 +56,11 @@ const DetailReviewFunction = ({
         <p>レビュー : {review.review}</p>
         <p>レビューワー : {review.reviewer}</p>
         {review.isMine && (
-          <button onClick={() => navigate(`/edit/${review.id}`)}>編集</button>
+          <button
+            onClick={() => navigate(`/edit/${review.id}`, { state: review })}
+          >
+            編集
+          </button>
         )}
       </StyledDetailReview>
     )

@@ -34,45 +34,42 @@ const ReviewListFunction = ({
 }) => {
   const [cookies] = useCookies(['token']);
   const page = useSelector(selectPage);
-  if (!reviewList && setReviewList && setIsExistNext) {
-    if (isLogin) {
-      throw axios
-        .get(`${process.env.REACT_APP_API_URL}/books?offset=${page * 10}`, {
-          headers: {
-            authorization: cookies.token,
-          },
-        })
-        .then((res) => {
-          setReviewList(res.data);
-          axios
-            .get(
-              `${process.env.REACT_APP_API_URL}/books?offset=${page * 10 + 10}`,
-              {
-                headers: { authorization: cookies.token },
-              }
-            )
-            .then((res) => {
-              res.data.length !== 0
-                ? setIsExistNext(true)
-                : setIsExistNext(false);
-            })
-            .catch(() => {
-              alert('レビューリストの取得に失敗しました。');
-            });
-        })
-        .catch(() => {
-          alert('レビューリストの取得に失敗しました。');
-        });
-    } else {
-      throw axios
-        .get(
-          `${process.env.REACT_APP_API_URL}/public/books?offset=${page * 10}`
-        )
-        .then((res) => setReviewList(res.data))
-        .catch(() => {
-          alert('レビューリストの取得に失敗しました。');
-        });
-    }
+  if (!reviewList || !setReviewList || !setIsExistNext) return;
+  if (isLogin) {
+    throw axios
+      .get(`${process.env.REACT_APP_API_URL}/books?offset=${page * 10}`, {
+        headers: {
+          authorization: cookies.token,
+        },
+      })
+      .then((res) => {
+        setReviewList(res.data);
+        throw axios
+          .get(
+            `${process.env.REACT_APP_API_URL}/books?offset=${page * 10 + 10}`,
+            {
+              headers: { authorization: cookies.token },
+            }
+          )
+          .then((res) => {
+            res.data.length !== 0
+              ? setIsExistNext(true)
+              : setIsExistNext(false);
+          })
+          .catch(() => {
+            alert('レビューリストの取得に失敗しました。');
+          });
+      })
+      .catch(() => {
+        alert('レビューリストの取得に失敗しました。');
+      });
+  } else {
+    throw axios
+      .get(`${process.env.REACT_APP_API_URL}/public/books?offset=${page * 10}`)
+      .then((res) => setReviewList(res.data))
+      .catch(() => {
+        alert('レビューリストの取得に失敗しました。');
+      });
   }
 
   return (
@@ -102,7 +99,7 @@ export const ReviewList = () => {
   const navigate = useNavigate();
 
   return (
-    <Suspense fallback={<Loading />}>
+    <>
       {isLogin ? <Header /> : <HeaderNoneAuth />}
 
       <section>
@@ -111,14 +108,16 @@ export const ReviewList = () => {
             <button onClick={() => navigate('/new')}>レビュー新規作成</button>
           </div>
         )}
-        <ReviewListFunction
-          isLogin={isLogin}
-          reviewList={reviewList}
-          setReviewList={setReviewList}
-          setIsExistNext={setIsExistNext}
-        />
+        <Suspense fallback={<Loading />}>
+          <ReviewListFunction
+            isLogin={isLogin}
+            reviewList={reviewList}
+            setReviewList={setReviewList}
+            setIsExistNext={setIsExistNext}
+          />
+        </Suspense>
         <Pagination isExistNext={isExistNext} />
       </section>
-    </Suspense>
+    </>
   );
 };

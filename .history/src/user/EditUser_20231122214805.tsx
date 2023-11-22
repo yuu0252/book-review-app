@@ -18,10 +18,10 @@ const EditUserFunction = ({
   username,
   setUsername,
 }: {
-  iconUrl?: string;
-  setIconUrl?: React.Dispatch<React.SetStateAction<any>>;
-  username?: string;
-  setUsername?: React.Dispatch<React.SetStateAction<any>>;
+  iconUrl: string;
+  setIconUrl: string;
+  username: React.Dispatch<React.SetStateAction<any>>;
+  setUsername: React.Dispatch<React.SetStateAction<any>>;
 }) => {
   const [iconFile, setIconFile] = useState<FormData>();
   const [isFailured, setIsFailured] = useState<boolean>(false);
@@ -89,8 +89,8 @@ const EditUserFunction = ({
       .catch(() => setIsFailured(true));
   };
 
-  if (!iconUrl && setIconUrl && !username && setUsername) {
-    throw axios
+  useEffect(() => {
+    axios
       .get(`${process.env.REACT_APP_API_URL}/users`, {
         headers: {
           Authorization: cookies.token,
@@ -101,7 +101,7 @@ const EditUserFunction = ({
         setIconUrl(res.data.iconUrl);
       })
       .catch(() => alert('ユーザー情報の取得に失敗しました。'));
-  }
+  }, []);
 
   return (
     <>
@@ -110,60 +110,54 @@ const EditUserFunction = ({
       )}
       <StyledForm>
         <h1>ユーザー情報編集</h1>
-        {username && (
-          <Formik
-            enableReinitialize
-            initialValues={{ name: username }}
-            validate={(values) => {
-              const errors: ErrorType = {};
-              if (!values.name) {
-                errors.name = 'ユーザーネームを入力してください。';
-              } else if (
-                !/^[ぁ-んァ-ヶｱ-ﾝﾞﾟ一-龠A-Z0-9]{4,}$/i.test(values.name)
-              ) {
-                errors.name =
-                  'ユーザーネームは4文字以上必要です。記号は使用できません。';
-              }
-              return errors;
-            }}
-            onSubmit={(values, { setSubmitting }) => {
-              const { name } = values;
-              onSubmitEditUser(name);
-              setSubmitting(false);
-            }}
-          >
-            {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              isSubmitting,
-            }) => (
-              <form onSubmit={handleSubmit} className="userForm">
-                <p>{errors.name && touched.name && errors.name}</p>
-                <label htmlFor="name">▶︎ ユーザーネーム</label>
-                <input
-                  aria-label="name"
-                  type="name"
-                  name="name"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.name}
-                />
-                <IconForm setIconFile={setIconFile} url={iconUrl} />
-                <button
-                  aria-label="submit"
-                  type="submit"
-                  disabled={isSubmitting}
-                >
-                  登録
-                </button>
-              </form>
-            )}
-          </Formik>
-        )}
+        <Formik
+          enableReinitialize
+          initialValues={{ name: username }}
+          validate={(values) => {
+            const errors: ErrorType = {};
+            if (!values.name) {
+              errors.name = 'ユーザーネームを入力してください。';
+            } else if (
+              !/^[ぁ-んァ-ヶｱ-ﾝﾞﾟ一-龠A-Z0-9]{4,}$/i.test(values.name)
+            ) {
+              errors.name =
+                'ユーザーネームは4文字以上必要です。記号は使用できません。';
+            }
+            return errors;
+          }}
+          onSubmit={(values, { setSubmitting }) => {
+            const { name } = values;
+            onSubmitEditUser(name);
+            setSubmitting(false);
+          }}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting,
+          }) => (
+            <form onSubmit={handleSubmit} className="userForm">
+              <p>{errors.name && touched.name && errors.name}</p>
+              <label htmlFor="name">▶︎ ユーザーネーム</label>
+              <input
+                aria-label="name"
+                type="name"
+                name="name"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.name}
+              />
+              <IconForm setIconFile={setIconFile} url={iconUrl} />
+              <button aria-label="submit" type="submit" disabled={isSubmitting}>
+                登録
+              </button>
+            </form>
+          )}
+        </Formik>
         <Link to="/">ホームへ</Link>
       </StyledForm>
     </>

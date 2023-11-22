@@ -13,19 +13,13 @@ type data = {
   review: string;
 };
 
-const EditReviewFunction = ({
-  review,
-  setReview,
-}: {
-  review?: data;
-  setReview?: React.Dispatch<React.SetStateAction<any>>;
-}) => {
+const EditReviewFunction = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [cookies] = useCookies();
 
-  if (!review && setReview) {
-    throw axios
+  useEffect(() => {
+    axios
       .get(`${process.env.REACT_APP_API_URL}/books/${id}`, {
         headers: {
           Authorization: cookies.token,
@@ -38,7 +32,7 @@ const EditReviewFunction = ({
         alert('レビュー詳細の取得に失敗しました。');
         navigate('/');
       });
-  }
+  }, []);
 
   const onSubmitEdit = (data: data) => {
     axios

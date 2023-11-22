@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { ReviewForm } from '../components/form/ReviewForm';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import { Loading } from '../components/Loading';
 
 type data = {
   title: string;
@@ -13,43 +12,11 @@ type data = {
   review: string;
 };
 
-const EditReviewFunction = ({
-  review,
-  setReview,
-}: {
-  review?: data;
-  setReview?: React.Dispatch<React.SetStateAction<any>>;
-}) => {
+export const EditReview = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [cookies] = useCookies();
-
-  if (!review && setReview) {
-    throw axios
-      .get(`${process.env.REACT_APP_API_URL}/books/${id}`, {
-        headers: {
-          Authorization: cookies.token,
-        },
-      })
-      .then((res) => {
-        setReview(res.data);
-      })
-      .catch(() => {
-        alert('レビュー詳細の取得に失敗しました。');
-        navigate('/');
-      });
-  }
-
-  const onSubmitEdit = (data: data) => {
-    axios
-      .put(`${process.env.REACT_APP_API_URL}/books/${id}`, data, {
-        headers: {
-          Authorization: cookies.token,
-        },
-      })
-      .then(() => navigate('/'))
-      .catch(() => alert('投稿に失敗しました。'));
-  };
+  const [review, setReview] = useState();
 
   const onClickDelete = () => {
     axios
@@ -65,6 +32,34 @@ const EditReviewFunction = ({
         alert('レビューの削除に失敗しました。');
       });
   };
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/books/${id}`, {
+        headers: {
+          Authorization: cookies.token,
+        },
+      })
+      .then((res) => {
+        setReview(res.data);
+      })
+      .catch(() => {
+        alert('レビュー詳細の取得に失敗しました。');
+        navigate('/');
+      });
+  }, []);
+
+  const onSubmitEdit = (data: data) => {
+    axios
+      .put(`${process.env.REACT_APP_API_URL}/books/${id}`, data, {
+        headers: {
+          Authorization: cookies.token,
+        },
+      })
+      .then(() => navigate('/'))
+      .catch(() => alert('投稿に失敗しました。'));
+  };
+
   return (
     <StyledEditReview>
       <h1>レビュー編集</h1>
@@ -74,16 +69,6 @@ const EditReviewFunction = ({
       </button>
       <Link to="/">ホームへ</Link>
     </StyledEditReview>
-  );
-};
-
-export const EditReview = () => {
-  const [review, setReview] = useState();
-
-  return (
-    <Suspense fallback={<Loading />}>
-      <EditReviewFunction review={review} setReview={setReview} />
-    </Suspense>
   );
 };
 

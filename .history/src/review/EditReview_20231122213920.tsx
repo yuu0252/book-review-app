@@ -18,7 +18,7 @@ const EditReviewFunction = ({
   setReview,
 }: {
   review?: data;
-  setReview?: React.Dispatch<React.SetStateAction<any>>;
+  setReview?: React.Dispatch<React.SetStateAction<undefined>>;
 }) => {
   const navigate = useNavigate();
   const { id } = useParams();

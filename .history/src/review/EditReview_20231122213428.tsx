@@ -13,43 +13,10 @@ type data = {
   review: string;
 };
 
-const EditReviewFunction = ({
-  review,
-  setReview,
-}: {
-  review?: data;
-  setReview?: React.Dispatch<React.SetStateAction<any>>;
-}) => {
+const EditReviewFunction = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [cookies] = useCookies();
-
-  if (!review && setReview) {
-    throw axios
-      .get(`${process.env.REACT_APP_API_URL}/books/${id}`, {
-        headers: {
-          Authorization: cookies.token,
-        },
-      })
-      .then((res) => {
-        setReview(res.data);
-      })
-      .catch(() => {
-        alert('レビュー詳細の取得に失敗しました。');
-        navigate('/');
-      });
-  }
-
-  const onSubmitEdit = (data: data) => {
-    axios
-      .put(`${process.env.REACT_APP_API_URL}/books/${id}`, data, {
-        headers: {
-          Authorization: cookies.token,
-        },
-      })
-      .then(() => navigate('/'))
-      .catch(() => alert('投稿に失敗しました。'));
-  };
 
   const onClickDelete = () => {
     axios
@@ -80,11 +47,34 @@ const EditReviewFunction = ({
 export const EditReview = () => {
   const [review, setReview] = useState();
 
-  return (
-    <Suspense fallback={<Loading />}>
-      <EditReviewFunction review={review} setReview={setReview} />
-    </Suspense>
-  );
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/books/${id}`, {
+        headers: {
+          Authorization: cookies.token,
+        },
+      })
+      .then((res) => {
+        setReview(res.data);
+      })
+      .catch(() => {
+        alert('レビュー詳細の取得に失敗しました。');
+        navigate('/');
+      });
+  }, []);
+
+  const onSubmitEdit = (data: data) => {
+    axios
+      .put(`${process.env.REACT_APP_API_URL}/books/${id}`, data, {
+        headers: {
+          Authorization: cookies.token,
+        },
+      })
+      .then(() => navigate('/'))
+      .catch(() => alert('投稿に失敗しました。'));
+  };
+
+  return <Suspense fallback={<Loading />}></Suspense>;
 };
 
 const StyledEditReview = styled.div`

@@ -22,19 +22,20 @@ type obj = {
 };
 
 const ReviewListFunction = ({
-  isLogin,
   reviewList,
   setReviewList,
-  setIsExistNext,
 }: {
-  isLogin: boolean;
   reviewList?: Array<obj>;
   setReviewList?: React.Dispatch<React.SetStateAction<any>>;
-  setIsExistNext?: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  const [isExistNext, setIsExistNext] = useState<boolean>(false);
   const [cookies] = useCookies(['token']);
   const page = useSelector(selectPage);
-  if (!reviewList && setReviewList && setIsExistNext) {
+
+  const isLogin = useSelector(selectLogin);
+
+  useEffect(() => {
+    if (!reviewList || !setReviewList) return;
     if (isLogin) {
       throw axios
         .get(`${process.env.REACT_APP_API_URL}/books?offset=${page * 10}`, {
@@ -73,8 +74,7 @@ const ReviewListFunction = ({
           alert('レビューリストの取得に失敗しました。');
         });
     }
-  }
-
+  }, [page]);
   return (
     <ul className="review__container">
       {reviewList?.map((review) => (
@@ -97,12 +97,10 @@ const ReviewListFunction = ({
 
 export const ReviewList = () => {
   const [reviewList, setReviewList] = useState<Array<obj>>();
-  const [isExistNext, setIsExistNext] = useState<boolean>(false);
-  const isLogin = useSelector(selectLogin);
   const navigate = useNavigate();
 
   return (
-    <Suspense fallback={<Loading />}>
+    <>
       {isLogin ? <Header /> : <HeaderNoneAuth />}
 
       <section>
@@ -111,14 +109,14 @@ export const ReviewList = () => {
             <button onClick={() => navigate('/new')}>レビュー新規作成</button>
           </div>
         )}
-        <ReviewListFunction
-          isLogin={isLogin}
-          reviewList={reviewList}
-          setReviewList={setReviewList}
-          setIsExistNext={setIsExistNext}
-        />
+        <Suspense fallback={<Loading />}>
+          <ReviewListFunction
+            reviewList={reviewList}
+            setReviewList={setReviewList}
+          />
+        </Suspense>
         <Pagination isExistNext={isExistNext} />
       </section>
-    </Suspense>
+    </>
   );
 };

@@ -34,7 +34,9 @@ const ReviewListFunction = ({
 }) => {
   const [cookies] = useCookies(['token']);
   const page = useSelector(selectPage);
-  if (!reviewList && setReviewList && setIsExistNext) {
+
+  useEffect(() => {
+    if (!reviewList || !setReviewList || !setIsExistNext) return;
     if (isLogin) {
       throw axios
         .get(`${process.env.REACT_APP_API_URL}/books?offset=${page * 10}`, {
@@ -73,8 +75,7 @@ const ReviewListFunction = ({
           alert('レビューリストの取得に失敗しました。');
         });
     }
-  }
-
+  }, [page]);
   return (
     <ul className="review__container">
       {reviewList?.map((review) => (
@@ -102,7 +103,7 @@ export const ReviewList = () => {
   const navigate = useNavigate();
 
   return (
-    <Suspense fallback={<Loading />}>
+    <>
       {isLogin ? <Header /> : <HeaderNoneAuth />}
 
       <section>
@@ -111,14 +112,16 @@ export const ReviewList = () => {
             <button onClick={() => navigate('/new')}>レビュー新規作成</button>
           </div>
         )}
-        <ReviewListFunction
-          isLogin={isLogin}
-          reviewList={reviewList}
-          setReviewList={setReviewList}
-          setIsExistNext={setIsExistNext}
-        />
+        <Suspense fallback={<Loading />}>
+          <ReviewListFunction
+            isLogin={isLogin}
+            reviewList={reviewList}
+            setReviewList={setReviewList}
+            setIsExistNext={setIsExistNext}
+          />
+        </Suspense>
         <Pagination isExistNext={isExistNext} />
       </section>
-    </Suspense>
+    </>
   );
 };
